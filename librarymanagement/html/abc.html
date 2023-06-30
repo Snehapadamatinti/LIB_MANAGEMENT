@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Button Navigation Example</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url("abcb2.jpeg");
+            background-size: cover;
+            background-repeat: no-repeat;
+
+        }
+
+        .button-container {
+            border: 2px solid #4CAF50;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 20px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="button-container">
+        <button class="button" onclick="goToPage('sample.html')">Fiction</button><br>
+        <br>
+        <button class="button" onclick="goToPage('page2.html')">Computer Science and Programming</button><br>
+        <br>
+        <button class="button" onclick="goToPage('page3.html')">Engineering Mathematics</button><br>
+        <br>
+        <button class="button" onclick="goToPage('page4.html')">Travel Guides</button><br>
+        <br>
+        <button class="button" onclick="goToPage('page5.html')">Magazines and Periodicals</button><br>
+        <br>
+
+    </div>
+
+    <script>
+        function goToPage(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+
+</html>

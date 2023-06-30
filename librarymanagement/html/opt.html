@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book List</title>
+    <style>
+        /* CSS styles for the book list */
+        #book-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .book-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .book-item p {
+            margin: 0;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Book List</h1>
+
+    <ul id="book-list"></ul>
+    <div id="loading">Loading...</div>
+
+    <script>
+        // JavaScript code for infinite scrolling with lazy loading
+
+        const apiUrl = 'YOUR_API_ENDPOINT'; // Replace with your API endpoint URL
+
+        let pageNumber = 1; // Initial page number
+        let isLoading = false; // Flag to prevent multiple simultaneous API calls
+
+        // Fetch books from the API
+        async function fetchBooks() {
+            try {
+                const response = await fetch(`${apiUrl}?page=${pageNumber}`);
+                const books = await response.json();
+                return books;
+            } catch (error) {
+                console.error('Error fetching books:', error);
+                return [];
+            }
+        }
+
+        // Render a book item
+        function renderBookItem(book) {
+            const item = document.createElement('li');
+            item.classList.add('book-item');
+            item.innerHTML = `<p><strong>Title:</strong> ${book.title}</p>
+                        <p><strong>Author:</strong> ${book.author}</p>`;
+            return item;
+        }
+
+        // Render a batch of book items
+        function renderBookItems(books) {
+            const bookList = document.getElementById('book-list');
+            const fragment = document.createDocumentFragment();
+
+            books.forEach((book) => {
+                const item = renderBookItem(book);
+                fragment.appendChild(item);
+            });
+
+            bookList.appendChild(fragment);
+        }
+
+        // Load more books when scrolling near the bottom of the page
+        function handleScroll() {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+            if (scrollTop + clientHeight >= scrollHeight - 20 && !isLoading) {
+                isLoading = true;
+                pageNumber++;
+                showLoadingIndicator();
+                fetchBooks()
+                    .then((books) => {
+                        hideLoadingIndicator();
+                        renderBookItems(books);
+                        isLoading = false;
+                    })
+                    .catch((error) => {
+                        hideLoadingIndicator();
+                        isLoading = false;
+                    });
+            }
+        }
+
+        // Show loading indicator
+        function showLoadingIndicator() {
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = 'block';
+        }
+
+        // Hide loading indicator
+        function hideLoadingIndicator() {
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = 'none';
+        }
+
+        // Attach scroll event listener
+        window.addEventListener('scroll', handleScroll);
+
+        // Initial load
+        fetchBooks()
+            .then((books) => {
+                hideLoadingIndicator();
+                renderBookItems(books);
+            })
+            .catch((error) => {
+                hideLoadingIndicator();
+            });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search Box with Suggestions</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #acfafa;
+            background-image: url("sb3.gif");
+            background-size: cover;
+            background-repeat: no-repeat;
+
+        }
+
+        .suggestions {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Search Box with Suggestions</h1>
+
+    <input type="text" id="searchBox" placeholder="Enter your search query" onkeyup="showSuggestions()">
+
+    <ul id="suggestionsList" class="suggestions"></ul>
+
+    <h2>Cart:</h2>
+    <ul id="cartList"></ul>
+
+    <script>
+        // Sample suggestions data
+        const suggestionsData = [
+            '"Clean Code: A Handbook of Agile Software Craftsmanship" by Robert C. Martin',
+            '"The Pragmatic Programmer: Your Journey to Mastery" by Andrew Hunt and David Thomas',
+            '"Introduction to the Theory of Computation" by Michael Sipser',
+            '"Design Patterns: Elements of Reusable Object-Oriented Software" by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides',
+            '"Cracking the Coding Interview: 189 Programming Questions and Solutions" by Gayle Laakmann McDowell',
+            '"Algorithms, Part I" by Robert Sedgewick and Kevin Wayne',
+            '"Structure and Interpretation of Computer Programs" by Harold Abelson and Gerald Jay Sussman',
+            '"Code: The Hidden Language of Computer Hardware and Software" by Charles Petzold',
+            '"Clean Architecture: A Craftsmans Guide to Software Structure and Design" by Robert C. Martin',
+            '"Introduction to Algorithms" by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein',
+            '"Head First Design Patterns" by Eric Freeman, Elisabeth Robson, Bert Bates, and Kathy Sierra',
+            '"Computer Networks: A Systems Approach" by Larry L. Peterson and Bruce S. Davie',
+            '"The Mythical Man-Month: Essays on Software Engineering" by Frederick P. Brooks Jr.',
+            '"Artificial Intelligence: A Modern Approach" by Stuart Russell and Peter Norvig',
+            '"Programming Pearls" by Jon Bentley',
+            '"Database System Concepts" by Abraham Silberschatz, Henry F. Korth, and S. Sudarshan',
+            '"Introduction to the Theory of Computation" by Michael Sipser',
+            '"Deep Learning" by Ian Goodfellow, Yoshua Bengio, and Aaron Courville',
+            '"Computer Organization and Design: The Hardware/Software Interface" by David A. Patterson and John L. Hennessy',
+            '"Operating System Concepts" by Abraham Silberschatz, Peter B. Galvin, and Greg Gagne',
+        ];
+
+        // Function to show suggestions based on search input
+        function showSuggestions() {
+            const searchQuery = document.getElementById("searchBox").value.toLowerCase();
+            const suggestionsList = document.getElementById("suggestionsList");
+            suggestionsList.innerHTML = "";
+
+            for (let i = 0; i < suggestionsData.length; i++) {
+                const suggestion = suggestionsData[i].toLowerCase();
+                if (suggestion.includes(searchQuery)) {
+                    const suggestionItem = document.createElement("li");
+                    suggestionItem.classList.add("suggestion-item");
+
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.classList.add("checkbox");
+                    checkbox.value = suggestion;
+                    checkbox.addEventListener("change", addToCart);
+
+                    const label = document.createElement("label");
+                    label.textContent = suggestionsData[i];
+
+                    suggestionItem.appendChild(checkbox);
+                    suggestionItem.appendChild(label);
+
+                    suggestionsList.appendChild(suggestionItem);
+                }
+            }
+        }
+
+        // Function to add checked items to the cart
+        function addToCart(event) {
+            const cartList = document.getElementById("cartList");
+
+            if (event.target.checked) {
+                const cartItem = document.createElement("li");
+                cartItem.textContent = event.target.value;
+                cartList.appendChild(cartItem);
+            } else {
+                const items = cartList.getElementsByTagName("li");
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].textContent === event.target.value) {
+                        cartList.removeChild(items[i]);
+                        break;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

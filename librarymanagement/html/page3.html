@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search Box with Suggestions</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #acfafa;
+            background-image: url("sb3.gif");
+            background-size: cover;
+            background-repeat: no-repeat;
+
+        }
+
+        .suggestions {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Search Box with Suggestions</h1>
+
+    <input type="text" id="searchBox" placeholder="Enter your search query" onkeyup="showSuggestions()">
+
+    <ul id="suggestionsList" class="suggestions"></ul>
+
+    <h2>Cart:</h2>
+    <ul id="cartList"></ul>
+
+    <script>
+        // Sample suggestions data
+        const suggestionsData = [
+            '"Advanced Engineering Mathematics" by Erwin Kreyszig',
+            '"Higher Engineering Mathematics" by John Bird',
+            '"Engineering Mathematics" by K.A. Stroud',
+            '"Mathematical Methods in the Physical Sciences" by Mary L. Boas',
+            '"Engineering Mathematics: A Foundation for Electronic, Electrical, Communications and Systems Engineers" by Anthony Croft and Robert Davison',
+            '"Advanced Engineering Mathematics" by Peter V. O.Neil',
+            '"Engineering Mathematics: Programmes and Problems" by K. A. Stroud and Dexter J. Booth',
+            '"Advanced Engineering Mathematics" by Michael Greenberg',
+            '"Engineering Mathematics" by John Bird',
+            '"Engineering Mathematics: A Modern Foundation for Engineering" by Glyn James',
+            '"Mathematics for Engineers" by Tony Croft and Robert Davison',
+            '"Engineering Mathematics: YouTube Workbook" by Christopher C. Tisdell',
+            '"Engineering Mathematics Pocket Book" by John Bird',
+            '"A Course in Advanced Calculus" by Robert S. Borden',
+            '"Advanced Engineering Mathematics" by Dennis G. Zill and Michael R. Cullen',
+            '"Engineering Mathematics" by H. K. Dass',
+            '"Essential Engineering Mathematics" by Michael Batty',
+            '"Engineering Mathematics: YouTube Workbook II" by Christopher C. Tisdell',
+            '"Advanced Engineering Mathematics" by R.K. Jain, S.R.K. Iyengar, and R. K. Jain',
+            '"Mathematical Methods for Physics and Engineering" by K. F. Riley, M. P. Hobson, and S. J. Bence',
+        ];
+
+        // Function to show suggestions based on search input
+        function showSuggestions() {
+            const searchQuery = document.getElementById("searchBox").value.toLowerCase();
+            const suggestionsList = document.getElementById("suggestionsList");
+            suggestionsList.innerHTML = "";
+
+            for (let i = 0; i < suggestionsData.length; i++) {
+                const suggestion = suggestionsData[i].toLowerCase();
+                if (suggestion.includes(searchQuery)) {
+                    const suggestionItem = document.createElement("li");
+                    suggestionItem.classList.add("suggestion-item");
+
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.classList.add("checkbox");
+                    checkbox.value = suggestion;
+                    checkbox.addEventListener("change", addToCart);
+
+                    const label = document.createElement("label");
+                    label.textContent = suggestionsData[i];
+
+                    suggestionItem.appendChild(checkbox);
+                    suggestionItem.appendChild(label);
+
+                    suggestionsList.appendChild(suggestionItem);
+                }
+            }
+        }
+
+        // Function to add checked items to the cart
+        function addToCart(event) {
+            const cartList = document.getElementById("cartList");
+
+            if (event.target.checked) {
+                const cartItem = document.createElement("li");
+                cartItem.textContent = event.target.value;
+                cartList.appendChild(cartItem);
+            } else {
+                const items = cartList.getElementsByTagName("li");
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].textContent === event.target.value) {
+                        cartList.removeChild(items[i]);
+                        break;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
